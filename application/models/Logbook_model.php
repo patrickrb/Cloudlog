@@ -2,6 +2,9 @@
 
 class Logbook_model extends CI_Model
 {
+	function __construct() {
+    $this->load->helper('sanitization');
+	}
 
   /* Add QSO to Logbook */
   function create_qso()
@@ -34,8 +37,8 @@ class Logbook_model extends CI_Model
     if ($this->input->post('exchangetype')) {
       switch ($this->input->post('exchangetype')) {
         case 'Exchange':
-          $srx_string = $this->input->post('exch_rcvd') == '' ? null : $this->input->post('exch_rcvd');
-          $stx_string = $this->input->post('exch_sent') == '' ? null : $this->input->post('exch_sent');
+          $srx_string = $this->input->post('exch_rcvd') == '' ? null : remove_non_alphanumeric($this->input->post('exch_rcvd'));
+          $stx_string = $this->input->post('exch_sent') == '' ? null : remove_non_alphanumeric($this->input->post('exch_sent'));
           $srx = null;
           $stx = null;
           break;
@@ -191,8 +194,8 @@ class Logbook_model extends CI_Model
       'COL_FREQ' => $this->parse_frequency($this->input->post('freq_display')),
       'COL_MODE' => $mode,
       'COL_SUBMODE' => $submode,
-      'COL_RST_RCVD' => $this->input->post('rst_rcvd'),
-      'COL_RST_SENT' => $this->input->post('rst_sent'),
+      'COL_RST_RCVD' => remove_non_alphanumeric($this->input->post('rst_rcvd')),
+      'COL_RST_SENT' => remove_non_alphanumeric($this->input->post('rst_sent')),
       'COL_NAME' => $this->input->post('name'),
       'COL_COMMENT' => $this->input->post('comment'),
       'COL_SAT_NAME' => $this->input->post('sat_name') == null ? '' : strtoupper($this->input->post('sat_name')),
@@ -1189,8 +1192,8 @@ class Logbook_model extends CI_Model
       'COL_FREQ' => $this->parse_frequency($this->input->post('freq')),
       'COL_MODE' => $mode,
       'COL_SUBMODE' => $submode,
-      'COL_RST_RCVD' => $this->input->post('rst_rcvd'),
-      'COL_RST_SENT' => $this->input->post('rst_sent'),
+      'COL_RST_RCVD' => remove_non_alphanumeric($this->input->post('rst_rcvd')),
+      'COL_RST_SENT' => remove_non_alphanumeric($this->input->post('rst_sent')),
       'COL_GRIDSQUARE' => strtoupper(trim($this->input->post('locator'))),
       'COL_VUCC_GRIDS' => strtoupper(preg_replace('/\s+/', '', $this->input->post('vucc_grids'))),
       'COL_DISTANCE' => $this->input->post('distance'),
